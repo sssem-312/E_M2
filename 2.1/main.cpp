@@ -24,33 +24,30 @@ int main()
             scanf(" %d", &n); 
             printf("\n"); 
             SetContacts(&a, n); 
-            menu(); 
             break; 
  
-        case 2: // Вывод элементов структуры 
+        case 2:
             Print(a); 
-            menu(); 
             break; 
  
-        case 3: // Удаление данных 
+        case 3:
             printf(" Какой контакт вы хотите удалить? Выберите номер от 1 до %d ", a.n); 
             scanf(" %d", &m);
 			printf("\n"); 
             Delete(&a, m - 1); 
-            menu(); 
             break; 
  
-        case 4: // Изменить данные 
+        case 4:
             printf(" Данные по какому контакту вы хотите изменить? Выберите номер от 1 до %d ", a.n); 
             scanf(" %d", &n); 
             printf("\n"); 
             SetContact(&a, n - 1); 
-            menu(); 
             break; 
  
         default: 
             break; 
         } 
+        menu(); 
     } 
  
     return 0; 

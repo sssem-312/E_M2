@@ -115,4 +115,5 @@ void load_operations(const char *lib_name) {
     if (dlerror() != NULL) {
         fprintf(stderr, "Ошибка при загрузке функции из библиотеки %s: %s\n", lib_name, dlerror());
     }
+    dlclose(handle);
 }

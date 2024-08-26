@@ -30,7 +30,6 @@ void SetContact(struct Contact* contact) {
         scanf(" %s", contact->info.linkNetwork);
         contact->info.flag = true;
     }
-    printf("\n Данные о контакте сохранены!\n");
 }
 
 void AddContact(struct PhoneBook* phoneBook) {
@@ -62,7 +61,6 @@ void AddContact(struct PhoneBook* phoneBook) {
             current->prev = newContact;
         }
     }
-    phoneBook->n++;
     printf("\n Данные о контакте добавлены!\n");
 }
 
@@ -70,9 +68,7 @@ void PrintContacts(struct PhoneBook* phoneBook) {
     struct Contact* current = phoneBook->head;
     while (current != NULL) {
         printf(" * Контакт *****\n");
-        printf(" Имя: %s\n", current->name.firstName);
-        printf(" Отчество: %s\n", current->name.secondName);
-        printf(" Фамилия: %s\n", current->name.lastName);
+        printf(" ФИО: %s %s %s\n", current->name.lastName, current->name.firstName, current->name.secondName);;
         printf(" Номер телефона: %s\n", current->phoneNumberMain);
         if (current->info.flag) {
             printf(" Дополнительный номер телефона: %s\n", current->info.phoneNumberMore);
@@ -87,37 +83,76 @@ void PrintContacts(struct PhoneBook* phoneBook) {
     }
 }
 
-void DeleteContact(struct PhoneBook* phoneBook, int index) {
-    if (phoneBook->head == NULL || index < 0) {
-        printf(" Список контактов пуст или индекс некорректен.\n");
+void DeleteContact(struct PhoneBook* phoneBook) {
+    if (phoneBook->head == NULL) {
+        printf("\n Список контактов пуст!\n");
         return;
     }
+
+    char lastName[L_NAME];
+    printf(" Введите фамилию контакта для его удаления: ");
+    scanf(" %s", lastName);
 
     struct Contact* current = phoneBook->head;
-    for (int i = 0; i < index && current != NULL; i++) {
+
+    while (current != NULL) {
+        if (strcmp(current->name.lastName, lastName) == 0) {
+            if (current->prev) {
+                current->prev->next = current->next;
+            } else {
+                phoneBook->head = current->next;
+            }
+
+            if (current->next) {
+                current->next->prev = current->prev;
+            } else {
+                phoneBook->tail = current->prev;
+            }
+
+            free(current);
+            printf("\n Контакт с фамилией '%s' удалён!\n", lastName);
+            return;
+        }
         current = current->next;
     }
+    printf("\n Контакт с фамилией '%s' не найден!\n", lastName);
+}
 
-    if (current == NULL) {
-        printf("Контакт не найден.\n");
+void EditContact(struct PhoneBook* phoneBook) {
+    if (phoneBook->head == NULL) {
+        printf("\n Список контактов пуст!\n");
         return;
     }
 
-    if (current->prev) {
-        current->prev->next = current->next;
-    } else {
-        phoneBook->head = current->next;
-    }
+    char lastName[L_NAME];
+    printf(" Введите фамилию контакта для его изменения: ");
+    scanf(" %s", lastName);
 
-    if (current->next) {
-        current->next->prev = current->prev;
-    } else {
-        phoneBook->tail = current->prev;
+    struct Contact* current = phoneBook->head;
+    while (current != NULL) {
+        if (strcmp(current->name.lastName, lastName) == 0) {
+            printf(" Выбранный контакт:\n");
+            printf(" Имя: %s\n", current->name.firstName);
+            printf(" Отчество: %s\n", current->name.secondName);
+            printf(" Фамилия: %s\n", current->name.lastName);
+            printf(" Номер телефона: %s\n", current->phoneNumberMain);
+            if (current->info.flag) {
+                printf(" Дополнительный номер телефона: %s\n", current->info.phoneNumberMore);
+                printf(" Место работы: %s\n", current->info.jobPlace);
+                printf(" Должность: %s\n", current->info.jobTitle);
+                printf(" Адрес EMail: %s\n", current->info.eMailAddressMain);
+                printf(" Доп. адрес EMail: %s\n", current->info.eMailAddressMore);
+                printf(" Ссылки на соц.сети: %s\n", current->info.linkNetwork);
+            }
+            
+            printf(" Введите новые данные для контакта:\n");
+            SetContact(current);
+            printf("\n Данные о контакте обновлены!\n");
+            return;
+        }
+        current = current->next;
     }
-
-    free(current);
-    phoneBook->n--;
-    printf("Контакт удалён.\n");
+    printf("\n Контакт с фамилией '%s' не найден!\n", lastName);
 }
 
 void menu() {
@@ -125,6 +160,7 @@ void menu() {
     printf(" [1] Добавить контакт\n");
     printf(" [2] Список контактов\n");
     printf(" [3] Удалить контакт\n");
+    printf(" [4] Изменить контакт\n");
     printf(" [0] Выход\n");
     printf(" ---------------------------------------\n");
 }
@@ -138,5 +174,4 @@ void freePhoneBook(struct PhoneBook* phoneBook) {
     }
     phoneBook->head = NULL;
     phoneBook->tail = NULL;
-    phoneBook->n = 0;
 }

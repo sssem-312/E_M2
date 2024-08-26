@@ -24,23 +24,24 @@ typedef struct {
     char linkNetwork[ETC];
 } Info;
 
-struct Contact {;
+struct Contact {
     Name name;
     char phoneNumberMain[L_NUMBER];
     Info info;
-    struct Contact* prev;
-    struct Contact* next;
 };
 
 struct PhoneBook {
-    struct Contact* head;
-    struct Contact* tail;
+    struct Contact contact;
+    struct PhoneBook* left;
+    struct PhoneBook* right;
 };
 
-void SetContact(struct Contact* contact);
-void AddContact(struct PhoneBook* phoneBook);
-void PrintContacts(struct PhoneBook* phoneBook);
-void DeleteContact(struct PhoneBook* phoneBook);
-void EditContact(struct PhoneBook* phoneBook);
+void SetContact(struct Contact* c);
+struct PhoneBook* AddContact(struct PhoneBook* root, struct Contact contact);
+void PrintContacts(struct PhoneBook* root);
+struct PhoneBook* FindMin(struct PhoneBook* node);
+struct PhoneBook* DeleteContact(struct PhoneBook* root, char* phoneNumber);
+void EditContact(struct PhoneBook* root, char* lastName);
 void menu();
-void freePhoneBook(struct PhoneBook* phoneBook);
+void FreeMemory(struct PhoneBook* root);
+

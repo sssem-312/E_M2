@@ -1,5 +1,5 @@
-#ifndef MSTAT_H
-#define MSTAT_H
+#ifndef MDYN_H
+#define MDYN_H
 
 #define L_NAME 10
 #define L_NUMBER 15
@@ -21,8 +21,7 @@ typedef struct {
     char linkNetwork[ETC];
 } Info;
 
-struct Contact {
-    int id;
+struct Contact {;
     Name name;
     char phoneNumberMain[L_NUMBER];
     Info info;
@@ -33,14 +32,14 @@ struct Contact {
 struct PhoneBook {
     struct Contact* head;
     struct Contact* tail;
-    int n;
 };
 
 void SetContact(struct Contact* contact);
 void AddContact(struct PhoneBook* phoneBook);
 void PrintContacts(struct PhoneBook* phoneBook);
-void DeleteContact(struct PhoneBook* phoneBook, int index);
+void DeleteContact(struct PhoneBook* phoneBook);
+void EditContact(struct PhoneBook* phoneBook);
 void menu();
 void freePhoneBook(struct PhoneBook* phoneBook);
 
-#endif // MSTAT_H
+#endif // MDYN_H
